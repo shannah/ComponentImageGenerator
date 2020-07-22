@@ -18,6 +18,10 @@ import com.codename1.ui.Image;
 import com.codename1.ui.util.ImageIO;
 import com.codename1.compgen.tests.*;
 import com.codename1.ui.CN;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -36,6 +40,9 @@ public class MainTestRunner extends AbstractTest {
     public interface Test {
         public Component getSubjectComponent();
         public String getId();
+        public Category getCategory();
+        public Links getLinks();
+        public String getDescription();
     }
     
 
@@ -64,6 +71,42 @@ public class MainTestRunner extends AbstractTest {
         return new File(baseDir, skin+sep+theme+sep+getOutputFileName(id)).getAbsolutePath();
     }
     
+    private String[] platforms() {
+        Set<String> out = new LinkedHashSet<String>();
+        for (File skinDir : baseDir.listFiles()) {
+            
+            if (skinDir.isDirectory()) {
+                out.add(skinDir.getName());
+            }
+        }
+        return out.toArray(new String[out.size()]);
+    }
+    
+    private String[] themes() {
+        Set<String> out = new LinkedHashSet<String>();
+        for (String platform : platforms()) {
+            
+            File skinDir = new File(baseDir, platform);
+            
+            for (File themeDir : skinDir.listFiles()) {
+                
+                if (themeDir.isDirectory()) {
+                    String themeName = themeDir.getName();
+                    out.add(themeName);
+                }
+            }
+        }
+        return out.toArray(new String[out.size()]);
+    }
+    
+    private Category[] categories(Test[] tests) {
+        Set<Category> out = new LinkedHashSet<Category>();
+        for (Test test : tests) {
+            out.add(test.getCategory());
+        }
+        return out.toArray(new Category[out.size()]);
+    }
+    
     public String generateHtml() {
         HTMLBuilder sb = new HTMLBuilder();
         sb.appendRaw("<!doctype html>").newLine()
@@ -72,6 +115,38 @@ public class MainTestRunner extends AbstractTest {
                 .open("title").append("Codename One Components").close()
                 .close()
                 .open("body");
+        
+        sb.open("div").attr("class", "cn-filters");
+        sb.open("div").attr("class", "cn1-filter cn-filter-platforms");
+        sb.open("h3").append("Skins").close();
+        sb.open("ul");
+        for (String platform : platforms()) {
+            sb.open("li").open("a").attr("href", "#").attr("data-platform", platform).append(platform).close().close();
+        }
+        sb.close(); // ul
+        sb.close(); // cn-filter-platforms
+        
+        sb.open("div").attr("class", "cn1-filter cn-filter-themes");
+        sb.open("h3").append("Theme").close();
+        sb.open("ul");
+        for (String theme : themes()) {
+            sb.open("li").open("a").attr("href", "#").attr("data-theme", theme).append(theme).close().close();
+        }
+        sb.close(); // ul
+        sb.close(); // cn-filter-themes
+        
+        sb.open("div").attr("class", "cn1-filter cn-filter-categories");
+        sb.open("h3").append("Theme").close();
+        sb.open("ul");
+        for (Category category : categories(getTests())) {
+            sb.open("li").open("a").attr("href", "#").attr("data-category", category.getId()).append(category.getLabel()).close().close();
+        }
+        sb.close(); // ul
+        sb.close(); // cn-filter-categories
+        
+        sb.close(); // div class=cn-filters
+        sb.open("div")
+                .attr("class", "cn-tests");
         for (Test test : getTests()) {
             sb.open("div")
                     .attr("class", "cn-test")
@@ -94,8 +169,14 @@ public class MainTestRunner extends AbstractTest {
                                 .attr("data-skin", skinName)
                                 .open("img").attr("src", skinName+"/"+themeName+"/"+getOutputFileName(test.getId()))
                                     .attr("style", "width:"+(imageWidth/2)+"px; height:"+(imageHeight/2)+"px; border:1px solid gray")
-                                .close()
-                                .close();
+                                .close() // img
+                                .open("div").attr("class", "cn-test-links").open("ul");
+                        for (Link link : test.getLinks()) {
+                            sb.open("li").open("a").attr("class", "cn-test-link-"+link.getType().name()).attr("href", link.getUrl()).append(link.getType().name()).close().close();
+                        }
+                        sb.close().close(); // ul / div cn1-test-links
+                        sb.open("div").attr("class", "cn-test-description").append(test.getDescription()).close();
+                        sb.close();// div cn1-test-preview
                                 
                                
                     }
@@ -104,6 +185,7 @@ public class MainTestRunner extends AbstractTest {
             sb.close(); //cn-test
                     
         }
+        sb.close(); //div cn-tests
         sb.close(); //body
         sb.close(); //html
         return sb.toString();

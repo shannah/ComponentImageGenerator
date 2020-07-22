@@ -27,6 +27,27 @@ public class BasicButton extends BaseTest {
     public String getId() {
         return "Button";
     }
+
+    @Override
+    public Category getCategory() {
+        return Category.Button;
+    }
+
+    @Override
+    public Links getLinks() {
+        return createDemoLinks();
+    }
+
+    @Override
+    public String getDescription() {
+        return "Simple Button";
+    }
+    
+    
+    
+    
+    
+    
     
     
 }

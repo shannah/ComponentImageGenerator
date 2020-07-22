@@ -33,6 +33,27 @@ public class BasicRadio extends BaseTest {
     public String getId() {
         return "RadioButton";
     }
+
+    @Override
+    public Category getCategory() {
+        return Category.RadioButton;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Simple Radio Button";
+    }
+
+    @Override
+    public Links getLinks() {
+        return createDemoLinks();
+    }
+    
+    
+    
+    
+    
+    
     
     
 }

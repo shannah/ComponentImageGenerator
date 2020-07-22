@@ -27,6 +27,27 @@ public class BasicLabel extends BaseTest {
     public String getId() {
         return "Label";
     }
+
+    @Override
+    public Category getCategory() {
+        return Category.Label;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Simple Label";
+    }
+
+    @Override
+    public Links getLinks() {
+        return createDemoLinks();
+    }
+    
+    
+    
+    
+    
+    
     
     
 }

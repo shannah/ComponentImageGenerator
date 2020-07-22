@@ -6,6 +6,7 @@
 package com.codename1.compgen.tests;
 
 import com.codename1.compgen.MainTestRunner.Test;
+import com.codename1.compgen.tests.Link.Type;
 import com.codename1.ui.Component;
 import com.codename1.ui.Form;
 import com.codename1.ui.layouts.FlowLayout;
@@ -42,5 +43,14 @@ public abstract class BaseTest implements Test {
 
     @Override
     public abstract String getId();
+    
+    public static Links createDemoLinks() {
+        return new Links(
+                new Link("http://example.com/css", Type.CSS),
+                new Link("http://example.com/javadoc/foobar", Type.JavaDocs),
+                new Link("http://example.com/java", Type.Java),
+                new Link("http://example.com/kotlin", Type.Kotlin)
+        );
+    }
     
 }

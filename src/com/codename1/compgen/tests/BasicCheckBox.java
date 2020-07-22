@@ -30,6 +30,27 @@ public class BasicCheckBox extends BaseTest {
     public String getId() {
         return "CheckBox";
     }
+
+    @Override
+    public Category getCategory() {
+        return Category.CheckBox;
+    }
+
+    @Override
+    public Links getLinks() {
+        return createDemoLinks();
+                
+    }
+
+    @Override
+    public String getDescription() {
+        return "Simple Checkbox";
+    }
+    
+    
+    
+    
+    
     
     
 }

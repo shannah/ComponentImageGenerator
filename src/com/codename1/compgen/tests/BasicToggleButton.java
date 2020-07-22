@@ -32,6 +32,27 @@ public class BasicToggleButton extends BaseTest {
     public String getId() {
         return "ToggleButton";
     }
+
+    @Override
+    public Category getCategory() {
+        return Category.ToggleButton;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Simple Toggle Buttons";
+    }
+
+    @Override
+    public Links getLinks() {
+        return createDemoLinks();
+    }
+    
+    
+    
+    
+    
+    
     
     
 }
